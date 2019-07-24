@@ -14,7 +14,7 @@ stages:
   - name: lint
   - name: test
   - name: docs
-  - name: pypi
+  - name: deploy
     if: tag IS present
 
 jobs:
@@ -51,7 +51,7 @@ jobs:
       script: skip
       install: skip
 
-    - stage: pypi
+    - stage: deploy
       before_deploy:
         - pip install poetry
         - poetry config http-basic.pypi $PYPI_USERNAME $PYPI_PASSWORD
@@ -61,6 +61,15 @@ jobs:
         script: poetry publish
       install: skip
       script: skip
+
+    - stage: deploy
+      env: TOXENV=docs
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        local_dir: docs/_site
+      python: "3.7"
 
   allow_failures:
     - os: windows

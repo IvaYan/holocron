@@ -17,6 +17,22 @@ from ._misc import parameters
     }
 )
 def process(app, stream, *, template="archive.j2", save_as="index.html"):
+    """Generate an archive page for a given stream.
+
+    Parameters
+    ``````````
+
+    * ``template`` -- an HTML template to use to produce a new archive page
+    * ``save_as`` -- desired destination of a produced archive page
+
+    Example
+    ```````
+
+    .. code:: yaml
+
+       - name: archive
+         template: index.j2
+    """
     passthrough, stream = itertools.tee(stream)
 
     index = holocron.WebSiteItem(
